@@ -3,6 +3,8 @@ package com.estudos.todolist.controller;
 import com.estudos.todolist.entity.Todo;
 import com.estudos.todolist.service.TodoService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +20,9 @@ public class TodoController {
     }
 
     @PostMapping
-    public List<Todo> create(@RequestBody @Valid Todo todo){
-        return todoService.create(todo);
+    public ResponseEntity<List<Todo>> create(@RequestBody @Valid Todo todo){
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(todoService.create(todo));
     }
 
     @GetMapping
@@ -27,12 +30,12 @@ public class TodoController {
         return todoService.list();
     }
 
-    @PutMapping
-    public List<Todo> update(@RequestBody Todo todo){
-        return todoService.update(todo);
+    @PutMapping("{id}")
+    public List<Todo> update(@PathVariable Long id, @RequestBody Todo todo) {
+        return todoService.update(id, todo);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public List<Todo> delete(@PathVariable("id") Long id){
         return todoService.delete(id);
     }
